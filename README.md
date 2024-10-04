@@ -16,7 +16,6 @@ In this project we will query an API to obtain a list of countries and their pas
 │   ├── scraper.py
 ├── .gitignore
 ├── leaders_data.json
-├── leaders.json
 ├── main.py
 ├── README.md
 ├── requirements.txt
