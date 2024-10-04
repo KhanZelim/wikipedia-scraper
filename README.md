@@ -35,20 +35,20 @@ In this project we will query an API to obtain a list of countries and their pas
 
 3. The script creates a Wikipedia scraper, gets a list of countries and their leaders from an API, gets the first paragrah for each leader fom Wikipedia, and saves it all in a dictionary. The resulting dictionary is saved to a "leaders_data.json" file in your root directory. 
 
-```python
-# Create a WikipediaScraper object
-scraper = WikipediaScraper()
+    ```python
+    # Create a WikipediaScraper object
+    scraper = WikipediaScraper()
 
-# Get list of countries from API
-countries = scraper.get_countries()
+    # Get list of countries from API
+    countries = scraper.get_countries()
 
-# Loop through the list and get the leaders for each country
-for country in countries:
-    scraper.get_leaders(country)
+    # Loop through the list and get the leaders for each country
+    for country in countries:
+        scraper.get_leaders(country)
 
-# Saving dictionary to a json file
-scraper.to_json_file("leaders_data")
-```
+    # Saving dictionary to a json file
+    scraper.to_json_file("leaders_data")
+    ```
 ## ⏱️ Timeline
 
 This project took three days for completion.
