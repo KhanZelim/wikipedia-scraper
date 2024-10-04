@@ -11,8 +11,8 @@ class WikipediaScraper:
         self.leaders_endpoint: str = "/leaders"
         self.cookies_endpoint: str = "/cookie"
         self.leaders_data: dict = {}
-        self.cookie: object = self.refresh_cookies()
         self.session: Session = requests.Session()
+        self.cookie: object = self.refresh_cookies()
 
     def refresh_cookies(self) -> object:
         self.cookie = self.session.get(f"{self.base_url}{self.cookies_endpoint}").cookies
@@ -24,33 +24,35 @@ class WikipediaScraper:
 
     def get_leaders(self, country: str) -> None:
         try:
-            countries = self.get_countries
-            for country in countries:
-                leaders = self.session.get(f"{self.base_url}{self.leaders_endpoint}", cookies=self.cookie, params={"country": country}).json()
-                for leader in leaders:
-                    wikipedia_url = leader["wikipedia_url"]
-                    leader["first_paragraph"] = self.get_first_paragraph(wikipedia_url)
-                self.leaders_data[country] = leaders
+            leaders = self.session.get(f"{self.base_url}{self.leaders_endpoint}", cookies=self.cookie, params={"country": country}).json()
+            for leader in leaders:
+                wikipedia_url = leader["wikipedia_url"]
+                leader["first_paragraph"] = self.get_first_paragraph(wikipedia_url)
+            self.leaders_data[country] = leaders
         except ConnectionError:
             self.refresh_cookies()
             self.get_leaders()
         except TypeError as e:
-            print(f"TypeError encountered: {e}, leader content: {leader}")
+            print(f"TypeError encountered: {e}")
 
     def get_first_paragraph(self, wikipedia_url: str) -> str:
         wiki = self.session.get(wikipedia_url)
         soup = BeautifulSoup(wiki.content, "html.parser")
         paragraphs = soup.find_all("p")
         for paragraph in paragraphs:
-            if paragraph.find("b"):
-                first_paragraph = paragraph.text
-                break
-        pattern = r"\[\d\]|\(.*ⓘ\)|\n"
+            for bold in soup.find_all("b"):
+                if bold in paragraph:
+                    first_paragraph = paragraph.text
+                    break
+            else:
+                continue
+            break
+        pattern = r"\[.*\]|\(.*ⓘ\)|\n"
         return re.sub(pattern, "", first_paragraph)
 
     def to_json_file(self, filepath: str) -> None:
-        with open(filepath, "w") as json_file:
-            json_file.write(json.dumps(self.leaders_data))
+        with open(f"{filepath}.json", "w", encoding="utf-8") as json_file:
+            json.dump(self.leaders_data, json_file, ensure_ascii=False, indent=4)
 
     def __str__(self) -> str:
-        return f"WikipediaScraper with base URL: {self.base_url}, Number of countries scraped: {len()}"
+        return f"WikipediaScraper with base URL: {self.base_url}"
