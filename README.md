@@ -32,7 +32,7 @@ In this project we will query an API to obtain a list of countries and their pas
     python main.py
     ```
 
-3. The script creates a Wikipedia scraper, gets a list of countries and their leaders from an API, gets the first paragrah for each leader fom Wikipedia, and saves it all in a dictionary. The resulting dictionary is saved to a "leaders_data.json" file in your root directory. 
+3. The script creates a Wikipedia scraper, gets a list of countries and their leaders from an API, gets the first paragraph for each leader fom Wikipedia, and saves it all in a dictionary. The resulting dictionary is saved to a "leaders_data.json" file in your root directory. 
 
     ```python
     # Create a WikipediaScraper object
